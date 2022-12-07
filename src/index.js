@@ -25,12 +25,7 @@ const makeCodeDemoShortcode = (options) => {
     const js = parseCode(tokens, 'js');
     const iframeAttributes = stringifyAttributes({ ...options.iframeAttributes, ...props });
 
-    let srcdoc = `
-  <!DOCTYPE html>
-  <html>
-    <head>${options.renderHead({ css, js })}</head>
-    <body>${options.renderBody({ html, js })}</body>
-  </html>`;
+    let srcdoc = `<!DOCTYPE html>${options.renderDocument({ html, css, js })}`;
 
     // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc. Also escape HTML tags.
     srcdoc = escape(

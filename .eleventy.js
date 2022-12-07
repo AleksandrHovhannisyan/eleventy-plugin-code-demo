@@ -5,8 +5,16 @@ const { EleventyPluginCodeDemo } = require('./src');
  */
 module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
-    renderHead: ({ css }) => `<style>${css}</style>`,
-    renderBody: ({ html, js }) => `${html}<script>${js}</script>`,
+    renderDocument: ({ html, css, js }) => `
+    <html>
+      <head>
+        <style>${css}</style>
+      </head>
+      <body>
+        ${html}
+        <script>${js}</script>
+      </body>
+    </html>`,
     iframeAttributes: {
       height: '100',
     },

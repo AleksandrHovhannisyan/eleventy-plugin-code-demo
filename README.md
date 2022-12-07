@@ -18,10 +18,17 @@ const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
   name: 'shortcodeName',
-  // Render whatever content you want to go in the <head>
-  renderHead: ({ css }) => `<style>${css}</style>`,
-  // Render whatever content you want to go in the <body>
-  renderBody: ({ html, js }) => `${html}<script>${js}</script>`,
+  // Render whatever document structure you want (other than doctype); the HTML, CSS, and JS parsed from the shortcode's body are supplied to this function as an argument, so you can position them wherever you want, or add class names or data-attributes to html/body
+  renderDocument: ({ html, css, js }) => `
+  <html>
+    <head>
+      <style>${css}</style>
+    </head>
+    <body>
+      ${html}
+      <script>${js}</script>
+    </body>
+  </html>`,
   // key-value pairs for HTML attributes; these are applied to all code previews
   iframeAttributes: {
     height: '300',
@@ -37,10 +44,9 @@ See [example usage](#example-usage) for how to use the shortcode.
 
 |Name|Type|Description|
 |----|----|-----------|
-|`name`|`string`|The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
-|`renderHead`|`(args: { css: string; js: string }) => string`|A render function to return custom markup for the iframe `<head>`'s children.|
-|`renderBody`|`(args: { html: string; js: string }) => string`|A render function to return custom markup for the iframe `<body>`'s children.|
-|`iframeAttributes`|`Record<string, unknown>`|Any HTML attributes you want to set globally on all code demos.|
+|`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
+|`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children. Do not include a doctype declaration.|
+|`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. Any HTML attributes you want to set globally on all code demos.|
 
 ### Shortcode Arguments
 
