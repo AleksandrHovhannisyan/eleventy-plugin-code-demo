@@ -18,7 +18,10 @@ const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
   name: 'shortcodeName',
-  // Render whatever document structure you want (other than doctype); the HTML, CSS, and JS parsed from the shortcode's body are supplied to this function as an argument, so you can position them wherever you want, or add class names or data-attributes to html/body
+  /* Render whatever document structure you want (other than doctype). The 
+  HTML, CSS, and JS parsed from the shortcode's body are supplied to this 
+  function as an argument, so you can position them wherever you want, or 
+  add class names or data-attributes to html/body */
   renderDocument: ({ html, css, js }) => `
   <html>
     <head>
@@ -38,7 +41,7 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
 });
 ```
 
-See [example usage](#example-usage) for how to use the shortcode.
+See [example usage](#example-usage) for how to use the shortcode. There's also a [demo folder](./demo/) running a sample Eleventy project.
 
 ### Plugin Options
 
@@ -53,7 +56,7 @@ See [example usage](#example-usage) for how to use the shortcode.
 |Name|Type|Description|
 |----|----|-----------|
 |`title`|`string`|A non-empty title for the code demo iframe.|
-|`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [example usage](#example-usage).|
+|`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).|
 
 ### Example Usage
 
@@ -123,7 +126,7 @@ button.addEventListener('click', () => {
 
 If you're using Nunjucks, you'll need to use [the `safe` filter](https://mozilla.github.io/nunjucks/templating.html#autoescaping) to opt out of auto-escaping the HTML.
 
-### Setting HTML Attributes on the Code Demo
+### Per-Usage HTML Attributes
 
 As we saw, you can set HTML attributes globally on all code demos in your `.eleventy.js` config using the `iframeAttributes` option, but you can also pass in attributes on a case-by-case basis. The example below leverages Nunjucks's support for [keyword arguments](https://mozilla.github.io/nunjucks/templating.html#keyword-arguments) to create a code demo that is 400 pixels tall:
 
