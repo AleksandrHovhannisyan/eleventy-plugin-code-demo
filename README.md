@@ -16,6 +16,8 @@ Register it as a plugin in your Eleventy config:
 const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
 
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
+  // Use any shortcode name you want
+  name: 'shortcodeName',
   // Render whatever content you want to go in the <head>
   renderHead: ({ css }) => `<style>${css}</style>`,
   // Render whatever content you want to go in the <body>
@@ -35,6 +37,7 @@ See [example usage](#example-usage) for how to use the shortcode.
 
 |Name|Type|Description|
 |----|----|-----------|
+|`name`|`string`|The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
 |`renderHead`|`(args: { css: string; js: string }) => string`|A render function to return custom markup for the iframe `<head>`'s children.|
 |`renderBody`|`(args: { html: string; js: string }) => string`|A render function to return custom markup for the iframe `<body>`'s children.|
 |`iframeAttributes`|`Record<string, unknown>`|Any HTML attributes you want to set globally on all code demos.|

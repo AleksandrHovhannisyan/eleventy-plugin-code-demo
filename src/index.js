@@ -4,8 +4,6 @@ const markdownIt = require('markdown-it');
 const outdent = require('outdent');
 const { parseCode, stringifyAttributes } = require('./utils');
 
-const SHORTCODE_NAME = 'codeDemo';
-
 /**
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
  * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
@@ -18,7 +16,7 @@ const makeCodeDemoShortcode = (options) => {
    */
   const codeDemoShortcode = (source, title, props = {}) => {
     if (!title) {
-      throw new Error(`${SHORTCODE_NAME}: you must provide a non-empty title for the iframe.`);
+      throw new Error(`${options.name}: you must provide a non-empty title for the iframe.`);
     }
 
     const tokens = markdownIt().parse(source);
@@ -52,10 +50,11 @@ const makeCodeDemoShortcode = (options) => {
 
 /**
  * @param {import('@11ty/eleventy/src/UserConfig')} eleventyConfig
- * @param {EleventyPluginCodeDemoOptions} options
+ * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
  */
 const EleventyPluginCodeDemo = (eleventyConfig, options) => {
-  eleventyConfig.addPairedShortcode(SHORTCODE_NAME, makeCodeDemoShortcode(options));
+  const name = options.name ?? 'codeDemo';
+  eleventyConfig.addPairedShortcode(name, makeCodeDemoShortcode({ ...options, name }));
 };
 
 module.exports = { EleventyPluginCodeDemo };
