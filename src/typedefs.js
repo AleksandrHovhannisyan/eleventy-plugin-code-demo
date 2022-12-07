@@ -9,7 +9,7 @@
  * @typedef EleventyPluginCodeDemoOptions
  * @property {string} name The shortcode name to use.
  * @property {(args: RenderArgs) => string} renderDocument A render function to render the iframe's document definition.
- * @property {Record<string, unknown>} iframeAttributes Any HTML attributes you want to set on the `<iframe>`.
+ * @property {Record<string, unknown>} [iframeAttributes] Any HTML attributes you want to set on the `<iframe>` (optional).
  */
 
 module.exports = {};

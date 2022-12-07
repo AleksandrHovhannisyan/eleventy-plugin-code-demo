@@ -47,6 +47,7 @@
   },
   "dependencies": {
     "@minify-html/node": "^0.10.3",
+    "clsx": "^1.2.1",
     "lodash.escape": "^4.0.1",
     "markdown-it": "^13.0.1",
     "outdent": "^0.8.0"

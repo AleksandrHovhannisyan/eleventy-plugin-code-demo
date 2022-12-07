@@ -17,6 +17,7 @@ module.exports = (eleventyConfig) => {
     </html>`,
     iframeAttributes: {
       height: '100',
+      class: 'code-demo',
     },
   });
 

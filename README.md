@@ -121,6 +121,8 @@ button.addEventListener('click', () => {
 {% endcodeDemo %}
 ````
 
+If you're using Nunjucks, you'll need to use [the `safe` filter](https://mozilla.github.io/nunjucks/templating.html#autoescaping) to opt out of auto-escaping the HTML.
+
 ### Setting HTML Attributes on the Code Demo
 
 As we saw, you can set HTML attributes globally on all code demos in your `.eleventy.js` config using the `iframeAttributes` option, but you can also pass in attributes on a case-by-case basis. The example below leverages Nunjucks's support for [keyword arguments](https://mozilla.github.io/nunjucks/templating.html#keyword-arguments) to create a code demo that is 400 pixels tall:

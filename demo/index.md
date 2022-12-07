@@ -2,9 +2,7 @@
 permalink: /
 ---
 
-Below is an interactive code demo:
-
-{% codeDemo 'Code demo', height="400" %}
+{% set html %}
 ```html
 <div class="buttons">
     <button aria-label="Increment" data-step="1">&plus;</button>
@@ -12,7 +10,9 @@ Below is an interactive code demo:
 </div>
 <output>0</output>
 ```
+{% endset %}
 
+{% set css %}
 ```css
 * {
     box-sizing: border-box;
@@ -38,7 +38,9 @@ button {
     line-height: 1;
 }
 ```
+{% endset %}
 
+{% set js %}
 ```js
 const buttons = document.querySelectorAll('[data-step]');
 const output = document.querySelector('output');
@@ -48,6 +50,20 @@ buttons.forEach((button) => {
         count += Number(button.getAttribute('data-step'));
         output.innerHTML = count;
     });
-});;
+});
 ```
+{% endset %}
+
+Below is an interactive code demo:
+
+{% codeDemo 'Code demo', height="400", class="another-class" %}
+{{ html | safe }}
+{{ css | safe }}
+{{ js | safe }}
 {% endcodeDemo %}
+
+Code blocks used:
+
+{{ html | safe }}
+{{ css | safe }}
+{{ js | safe }}

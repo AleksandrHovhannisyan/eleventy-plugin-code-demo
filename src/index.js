@@ -3,12 +3,15 @@ const minifyHtml = require('@minify-html/node');
 const markdownIt = require('markdown-it');
 const outdent = require('outdent');
 const { parseCode, stringifyAttributes } = require('./utils');
+const clsx = require('clsx');
 
 /**
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
  * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
  */
 const makeCodeDemoShortcode = (options) => {
+  const sharedIframeAttributes = options.iframeAttributes;
+
   /**
    * @param {string} source The children of this shortcode, as Markdown code blocks.
    * @param {string} title The title to set on the iframe.
@@ -23,7 +26,9 @@ const makeCodeDemoShortcode = (options) => {
     const css = parseCode(tokens, 'css');
     const html = parseCode(tokens, 'html');
     const js = parseCode(tokens, 'js');
-    const iframeAttributes = stringifyAttributes({ ...options.iframeAttributes, ...props });
+
+    const className = clsx(sharedIframeAttributes?.class, props.class);
+    const iframeAttributes = stringifyAttributes({ ...sharedIframeAttributes, ...props, class: className });
 
     let srcdoc = `<!DOCTYPE html>${options.renderDocument({ html, css, js })}`;
 
