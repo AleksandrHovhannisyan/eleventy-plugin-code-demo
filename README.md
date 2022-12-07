@@ -1,5 +1,7 @@
 # eleventy-plugin-code-demo
 
+> Add interactive code demos to an Eleventy site using Markdown code blocks.
+
 ## Getting Started
 
 Install the package:
@@ -19,7 +21,7 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Render whatever content you want to go in the <body>
   renderBody: ({ html, js }) => `${html}<script>${js}</script>`,
   // key-value pairs for HTML attributes; these are applied to all code previews
-  props: {
+  iframeAttributes: {
     height: '300',
     style: 'width: 100%;',
     frameborder: '0',
@@ -27,9 +29,30 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
 });
 ```
 
+See [example usage](#example-usage) for how to use the shortcode.
+
+### Plugin Options
+
+|Name|Type|Description|
+|----|----|-----------|
+|`renderHead`|`(args: { css: string; js: string }) => string`|A render function to return custom markup for the iframe `<head>`'s children.|
+|`renderBody`|`(args: { html: string; js: string }) => string`|A render function to return custom markup for the iframe `<body>`'s children.|
+|`iframeAttributes`|`Record<string, unknown>`|Any HTML attributes you want to set globally on all code demos.|
+
+### Shortcode Arguments
+
+|Name|Type|Description|
+|----|----|-----------|
+|`title`|`string`|A non-empty title for the code demo iframe.|
+|`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [example usage](#example-usage).|
+
 ### Example Usage
 
-The shortcode will render as an interactive iframe powered by the fenced code blocks that you define in its body:
+> **Note**: All code comments and whitespace are removed, and HTML tags are escaped. You do not need to worry about doing this yourself. The only caveat is that you should never forward user-generated code to this shortcode.
+
+The shortcode renders as an interactive `<iframe>` powered by fenced Markdown code blocks defined in its body.
+
+Here's an example that creates a button with some simple CSS and a click listener:
 
 ````md
 {% codeDemo 'My iframe title' %}
@@ -50,7 +73,15 @@ button.addEventListener('click', () => {
 {% endcodeDemo %}
 ````
 
-You could also define the code separately and interpolate it (example in Liquid):
+A couple things to note:
+
+- The order does not matter for the code blocks.
+- All children are optional.
+- Titles are required for accessibility, and an error will be thrown if you do not provide one.
+
+### Interpolating Code Blocks
+
+You could also define your code separately and interpolate it (example shown in Liquid using `{% capture %}` tags):
 
 ````md
 {% capture html %}
@@ -58,7 +89,6 @@ You could also define the code separately and interpolate it (example in Liquid)
 <button>Click me!</button>
 ```
 {% endcapture %}
-
 {% capture css %}
 ```css
 button {
@@ -66,7 +96,6 @@ button {
 }
 ```
 {% endcapture %}
-
 {% capture js %}
 ```js
 const button = document.querySelector('button');
@@ -83,7 +112,19 @@ button.addEventListener('click', () => {
 {% endcodeDemo %}
 ````
 
-Note that the order does not matter. Also, all children are optional.
+### Setting HTML Attributes on the Code Demo
+
+As we saw, you can set HTML attributes globally on all code demos in your `.eleventy.js` config using the `iframeAttributes` option, but you can also pass in attributes on a case-by-case basis. The example below leverages Nunjucks's support for [keyword arguments](https://mozilla.github.io/nunjucks/templating.html#keyword-arguments) to create a code demo that is 400 pixels tall:
+
+````md
+{% codeDemo 'Title', width="400" %}
+```html
+<button>Click me!</button>
+```
+{% endcodeDemo %}
+````
+
+> If you're using Liquid, keep an eye on this issue for keyword-argument support: https://github.com/11ty/eleventy/issues/2679. Or see my article here: [Passing Object Arguments to Liquid Shortcodes in 11ty](https://www.aleksandrhovhannisyan.com/blog/passing-object-arguments-to-liquid-shortcodes-in-11ty/).
 
 ## Use Cases and Motivation
 
