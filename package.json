@@ -1,0 +1,54 @@
+{
+  "name": "eleventy-plugin-code-demo",
+  "version": "0.0.0",
+  "description": "Render interactive code demos in your Eleventy site with iframes",
+  "keywords": [
+    "eleventy",
+    "eleventy-plugin",
+    "iframe"
+  ],
+  "main": "src/index.js",
+  "files": [
+    "src/index.js",
+    "src/typedefs.js",
+    "README.md",
+    "package.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AleksandrHovhannisyan/eleventy-plugin-code-demo.git"
+  },
+  "homepage": "https://github.com/AleksandrHovhannisyan/eleventy-plugin-code-demo.git",
+  "author": {
+    "name": "Aleksandr Hovhannisyan",
+    "url": "https://www.aleksandrhovhannisyan.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --incremental"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^1.0.2",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "husky": "4.3.0",
+    "lint-staged": "12.1.7",
+    "prettier": "^2.7.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-checkout": "yarn"
+    }
+  },
+  "lint-staged": {
+    "*.js": "yarn run lint:js:fix"
+  },
+  "dependencies": {
+    "@minify-html/node": "^0.10.3",
+    "lodash.escape": "^4.0.1",
+    "markdown-it": "^13.0.1",
+    "outdent": "^0.8.0"
+  }
+}
