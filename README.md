@@ -2,6 +2,8 @@
 
 > Add interactive code demos to an Eleventy site using Markdown code blocks.
 
+This plugin was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes allow us to define their markup using the `srcdoc` HTML attribute specifying all of the markup for the iframe as a string. This plugin allows you to define your code snippets in a familiar way—complete with syntax highlighting—and then compresses all of your code into one long `srcdoc` string that powers a lightweight iframe.
+
 ## Getting Started
 
 Install the package:
@@ -48,7 +50,7 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 |Name|Type|Description|
 |----|----|-----------|
 |`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
-|`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children. Do not include a doctype declaration.|
+|`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children.|
 |`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. Any HTML attributes you want to set globally on all code demos.|
 
 ### Shortcode Arguments
@@ -61,7 +63,7 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 
 ### Example Usage
 
-> **Note**: All code comments and whitespace are removed, and quotes are escaped to ensure that they don't break your page's HTML. You do not need to worry about doing this yourself. The only caveat is that you should never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS.
+> **Note**: All code comments and whitespace are removed, and HTML is escaped to ensure that it doesn't break the iframe. You do not need to worry about doing this yourself. The only caveat is that you should never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS.
 
 The shortcode renders as an interactive `<iframe>` powered by fenced Markdown code blocks defined in its body.
 
@@ -113,11 +115,12 @@ A couple things to note:
 
 - The order does not matter for the code blocks.
 - All children are optional.
+- Multiple code blocks of the same type (e.g., two CSS blocks) will be merged.
 - Titles are required for accessibility, and an error will be thrown if you do not provide one.
 
 ### Interpolating Code Blocks
 
-You could also define your code separately and interpolate it (example shown in Liquid using `{% capture %}` tags):
+You could also define your code blocks separately and interpolate them. The following example uses Liquid's `{% capture %}` tags to do this, but you could also use Nunjucks's `{% set %}` to achieve the same result:
 
 ````md
 {% capture html %}
@@ -155,7 +158,7 @@ If you're using Nunjucks, you'll need to use [the `safe` filter](https://mozilla
 As we saw, you can set HTML attributes globally on all code demos in your `.eleventy.js` config using the `iframeAttributes` option, but you can also pass in attributes on a case-by-case basis. The example below leverages Nunjucks's support for [keyword arguments](https://mozilla.github.io/nunjucks/templating.html#keyword-arguments) to create a code demo that is 400 pixels tall:
 
 ````md
-{% codeDemo 'Title', width="400" %}
+{% codeDemo 'Title', height="400" %}
 ```html
 <button>Click me!</button>
 ```
@@ -173,6 +176,3 @@ I could create blank pages on my site and embed them as iframes, but that feels 
 1. Avoid having to wrangle with CSS specificity, and
 2. Be able to write custom JavaScript isolated from the rest of the page.
 
-This plugin was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes allow us to define their markup using the `srcdoc` HTML attribute, which basically contains all of the markup for the page.
-
-This plugin allows you to define your code snippets in a familiar way, complete with syntax highlighting, and then compresses all of your code into one long `srcdoc` string embedded in a lightweight iframe.
