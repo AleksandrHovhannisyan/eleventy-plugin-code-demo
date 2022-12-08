@@ -1,5 +1,5 @@
 const { outdent } = require('outdent');
-const { makeCodeDemoShortcode } = require('.');
+const { makeCodeDemoShortcode } = require('./utils');
 
 describe('makeCodeDemoShortcode', () => {
   it('includes html, css, and js', () => {
