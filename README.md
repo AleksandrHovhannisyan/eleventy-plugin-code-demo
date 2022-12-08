@@ -55,23 +55,36 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 
 |Name|Type|Description|
 |----|----|-----------|
-|`title`|`string`|A non-empty title for the code demo iframe.|
+|`title`|`string`|A non-empty title for the code demo iframe. Required. Code demos without a title will throw an error.|
 |`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).|
 
 ### Example Usage
 
-> **Note**: All code comments and whitespace are removed, and HTML tags are escaped. You do not need to worry about doing this yourself. The only caveat is that you should never forward user-generated code to this shortcode.
+> **Note**: All code comments and whitespace are removed, and quotes are escaped to ensure that they don't break your page's HTML. You do not need to worry about doing this yourself. The only caveat is that you should never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS.
 
 The shortcode renders as an interactive `<iframe>` powered by fenced Markdown code blocks defined in its body.
 
-Here's an example that creates a button with some simple CSS and a click listener:
+The following example creates a button with some simple CSS and a click listener:
 
 ````md
-{% codeDemo 'My iframe title' %}
+{% codeDemo 'Demo of a button that shows an alert when clicked' %}
 ```html
 <button>Click me!</button>
 ```
 ```css
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+body,
+html {
+  height: 100%;
+}
+body {
+  display: grid;
+  place-content: center;
+}
 button {
   padding: 8px;
 }
@@ -84,6 +97,16 @@ button.addEventListener('click', () => {
 ```
 {% endcodeDemo %}
 ````
+
+This renders as the following interactive button:
+
+![A small rectangular iframe window with an inset border and a centered button that reads Click me](https://user-images.githubusercontent.com/19352442/206337332-a375ffa5-3fe1-4753-896e-5f5756cf6034.png)
+
+With this output HTML:
+
+```html
+<iframe title="My iframe title" srcdoc="<!doctypehtml><style>*{box-sizing:border-box;padding:0;margin:0}body,html{height:100%}body{display:grid;place-content:center}button{padding:8px}</style><body><button>Click me!</button><script>const button=document.querySelector('button');button.addEventListener('click',()=>{alert('hello, 11ty!')})</script>" height="100" class="code-demo"></iframe>
+```
 
 A couple things to note:
 
@@ -142,14 +165,12 @@ As we saw, you can set HTML attributes globally on all code demos in your `.elev
 
 ## Use Cases and Motivation
 
-On my site, I wanted to be able to create isolated, independent code demos containing only the markup, styling, and interactivity that I decided to give them. I could use jsFiddle or Codepen, but those services may not be around forever, and they also typically slow down your page load speed with JavaScript.
+On my site, I wanted to be able to create isolated, independent code demos containing only the markup, styling, and interactivity that I decided to give them, without having to reset styling from my website. I could use jsFiddle or Codepen, but those services typically load third-party JavaScript and may set third-party cookies.
 
 I could create blank pages on my site and embed them as iframes, but that feels like overkill. Plus, I wanted to be able to show my users code snippets while keeping my demos in sync with the code. Stephanie Eckles has written about [how to add static code demos to an 11ty site](https://11ty.rocks/posts/eleventy-templating-static-code-demos/), but I wanted to leverage iframes to:
 
 1. Avoid having to wrangle with CSS specificity, and
 2. Be able to write custom JavaScript isolated from the rest of the page.
-
-## How It Works
 
 This plugin was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes allow us to define their markup using the `srcdoc` HTML attribute, which basically contains all of the markup for the page.
 
