@@ -1,8 +1,8 @@
 # eleventy-plugin-code-demo
 
-> Add interactive code demos to an Eleventy site using Markdown code blocks.
+> Add interactive HTML/CSS/JS code demos to an Eleventy site using Markdown code blocks.
 
-This plugin was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes allow us to define their markup using the `srcdoc` HTML attribute specifying all of the markup for the iframe as a string. This plugin allows you to define your code snippets in a familiar way—complete with syntax highlighting—and then compresses all of your code into one long `srcdoc` string that powers a lightweight iframe.
+This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need to have a `src`; you can also define their markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
 
 ## Getting Started
 
@@ -171,7 +171,7 @@ As we saw, you can set HTML attributes globally on all code demos in your `.elev
 
 On my site, I wanted to be able to create isolated, independent code demos containing only the markup, styling, and interactivity that I decided to give them, without having to reset styling from my website. I could use jsFiddle or Codepen, but those services typically load third-party JavaScript and may set third-party cookies.
 
-I could create blank pages on my site and embed them as iframes, but that feels like overkill. Plus, I wanted to be able to show my users code snippets while keeping my demos in sync with the code. Stephanie Eckles has written about [how to add static code demos to an 11ty site](https://11ty.rocks/posts/eleventy-templating-static-code-demos/), but I wanted to leverage iframes to:
+I could create blank pages on my site and embed them as iframes, but that feels like overkill. Plus, I wanted to be able to show my users code snippets while keeping my demos in sync with the code. Stephanie Eckles wrote about [how to add static code demos to an 11ty site](https://11ty.rocks/posts/eleventy-templating-static-code-demos/), but I wanted to leverage iframes to:
 
 1. Avoid having to wrangle with CSS specificity, and
 2. Be able to write custom JavaScript isolated from the rest of the page.

@@ -71,6 +71,9 @@ const makeCodeDemoShortcode = (options) => {
     srcdoc = escape(srcdoc);
 
     let iframeAttributes = { ...sharedIframeAttributes, ...props };
+    /* Do this separately to allow for multiple class names. Note that this should 
+    technically also be done for other HTML attributes that could accept multiple 
+    values, like aria-describedby. But it's not worth accounting for every possibility here. */
     const className = clsx(sharedIframeAttributes?.class, props.class);
     if (className) {
       iframeAttributes.class = className;
