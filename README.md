@@ -55,6 +55,7 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 
 |Name|Type|Description|
 |----|----|-----------|
+|`source`|`string`|Implicit argument to the shortcode when you use the [paired shortcode](https://www.11ty.dev/docs/shortcodes/#paired-shortcodes) syntax in Eleventy. Contains all your Markdown code blocks.|
 |`title`|`string`|A non-empty title for the code demo iframe. Required. Code demos without a title will throw an error.|
 |`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).|
 

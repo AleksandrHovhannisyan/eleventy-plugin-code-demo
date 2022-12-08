@@ -22,26 +22,40 @@ const makeCodeDemoShortcode = (options) => {
       throw new Error(`${options.name}: you must provide a non-empty title for the iframe.`);
     }
 
+    // This comes from Nunjucks when passing in keyword arguments; we don't want it to make its way into the output HTML
+    if (props['__keywords']) {
+      delete props['__keywords'];
+    }
+
     const tokens = markdownIt().parse(source);
-    const css = parseCode(tokens, 'css');
     const html = parseCode(tokens, 'html');
+    const css = parseCode(tokens, 'css');
     const js = parseCode(tokens, 'js');
 
-    const className = clsx(sharedIframeAttributes?.class, props.class);
-    const iframeAttributes = stringifyAttributes({ ...sharedIframeAttributes, ...props, class: className });
-
+    // Allow users to customize their document structure, given this HTML, CSS, and JS
     let srcdoc = options.renderDocument({ html, css, js });
-    // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc. Also escape HTML tags.
-    srcdoc = escape(
-      minifyHtml.minify(Buffer.from(srcdoc), {
+    // We have to check this or Buffer.from will throw segfaults
+    if (srcdoc) {
+      // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc.
+      srcdoc = minifyHtml.minify(Buffer.from(srcdoc), {
         keep_spaces_between_attributes: false,
         // Only need to minify these two if they're present
         minify_css: !!css,
         minify_js: !!js,
-      })
-    );
+      });
+    }
+    srcdoc = escape(srcdoc);
 
-    return outdent`<iframe title="${title}" srcdoc="${srcdoc}" ${iframeAttributes}></iframe>`;
+    let iframeAttributes = { ...sharedIframeAttributes, ...props };
+    const className = clsx(sharedIframeAttributes?.class, props.class);
+    if (className) {
+      iframeAttributes.class = className;
+    }
+    iframeAttributes = stringifyAttributes(iframeAttributes);
+
+    return outdent`<iframe title="${title}" srcdoc="${srcdoc}"${
+      iframeAttributes ? ` ${iframeAttributes}` : ''
+    }></iframe>`;
   };
 
   return codeDemoShortcode;
@@ -56,4 +70,4 @@ const EleventyPluginCodeDemo = (eleventyConfig, options) => {
   eleventyConfig.addPairedShortcode(name, makeCodeDemoShortcode({ ...options, name }));
 };
 
-module.exports = { EleventyPluginCodeDemo };
+module.exports = { makeCodeDemoShortcode, EleventyPluginCodeDemo };
