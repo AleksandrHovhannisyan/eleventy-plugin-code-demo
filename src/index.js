@@ -30,8 +30,7 @@ const makeCodeDemoShortcode = (options) => {
     const className = clsx(sharedIframeAttributes?.class, props.class);
     const iframeAttributes = stringifyAttributes({ ...sharedIframeAttributes, ...props, class: className });
 
-    let srcdoc = `<!DOCTYPE html>${options.renderDocument({ html, css, js })}`;
-
+    let srcdoc = options.renderDocument({ html, css, js });
     // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc. Also escape HTML tags.
     srcdoc = escape(
       minifyHtml.minify(Buffer.from(srcdoc), {

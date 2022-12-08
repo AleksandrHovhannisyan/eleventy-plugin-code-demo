@@ -6,6 +6,7 @@ const { EleventyPluginCodeDemo } = require('./src');
 module.exports = (eleventyConfig) => {
   eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
     renderDocument: ({ html, css, js }) => `
+    <!DOCTYPE html>
     <html>
       <head>
         <style>${css}</style>

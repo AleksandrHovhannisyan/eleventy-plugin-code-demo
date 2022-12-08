@@ -18,11 +18,11 @@ const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
   name: 'shortcodeName',
-  /* Render whatever document structure you want (other than doctype). The 
-  HTML, CSS, and JS parsed from the shortcode's body are supplied to this 
-  function as an argument, so you can position them wherever you want, or 
-  add class names or data-attributes to html/body */
+  /* Render whatever document structure you want. The HTML, CSS, and JS parsed 
+  from the shortcode's body are supplied to this function as an argument, so 
+  you can position them wherever you want, or add class names or data-attributes to html/body */
   renderDocument: ({ html, css, js }) => `
+  <!DOCTYPE html>
   <html>
     <head>
       <style>${css}</style>
