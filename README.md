@@ -4,6 +4,8 @@
 
 This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need to have a `src`; you can also define their markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
 
+I used this plugin extensively in the following interactive article: https://www.aleksandrhovhannisyan.com/blog/interactive-guide-to-javascript-events/. You may find it useful as a point of reference for what can be done.
+
 ## Getting Started
 
 Install the package:
