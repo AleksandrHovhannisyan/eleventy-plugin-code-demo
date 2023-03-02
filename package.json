@@ -26,7 +26,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "ELEVENTY_ENV=development npx @11ty/eleventy --serve --incremental",
+    "dev": "cross-env ELEVENTY_ENV=development npx @11ty/eleventy --serve --incremental",
     "test": "npx jest",
     "test:watch": "npx jest --watch"
   },
@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^1.0.2",
+    "cross-env": "^7.0.3",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
