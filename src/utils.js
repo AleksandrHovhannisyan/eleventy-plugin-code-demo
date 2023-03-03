@@ -1,4 +1,4 @@
-const escape = require('lodash/escape');
+const escape = require('lodash.escape');
 const minifyHtml = require('@minify-html/node');
 const markdownIt = require('markdown-it');
 const outdent = require('outdent');
