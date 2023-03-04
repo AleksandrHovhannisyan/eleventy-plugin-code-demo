@@ -1,17 +1,30 @@
+<!-- omit in toc -->
 # eleventy-plugin-code-demo
 
 > Add interactive HTML/CSS/JS code demos to an Eleventy site using Markdown code blocks.
 
-This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need to have a `src`; you can also define their markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
+This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, and JS Markdown code blocks into an interactive iframe. It was inspired by Maciej Mionskowski's idea in the following article: [Building HTML, CSS, and JS code preview using iframe's srcdoc attribute](https://mionskowski.pl/posts/iframe-code-preview/). In short, iframes don't need a `src`; you can define their HTML markup inline with the [`HTMLIFrameElement.srcdoc`](https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/srcdoc) attribute.
 
-I used this plugin extensively in the following interactive article: https://www.aleksandrhovhannisyan.com/blog/interactive-guide-to-javascript-events/. You may find it useful as a point of reference for what can be done.
+> **Note**: Never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS. In most cases, you are never going to be doing this anyway. For example, code demos that you define statically in your source files are perfectly safe.
+
+<!-- omit in toc -->
+## Table of Contents
+
+- [Getting Started](#getting-started)
+- [Plugin Options](#plugin-options)
+- [Shortcode Arguments](#shortcode-arguments)
+- [Example Usage](#example-usage)
+  - [Interpolating Code Blocks](#interpolating-code-blocks)
+  - [Per-Usage HTML Attributes](#per-usage-html-attributes)
+  - [Escaping and Minification](#escaping-and-minification)
+- [Use Cases and Motivation](#use-cases-and-motivation)
 
 ## Getting Started
 
 Install the package:
 
 ```
-yarn add eleventy-plugin-code-demo
+yarn add -D eleventy-plugin-code-demo
 ```
 
 Register it as a plugin in your Eleventy config:
@@ -45,17 +58,19 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
 });
 ```
 
-See [example usage](#example-usage) for how to use the shortcode. There's also a [demo folder](./demo/) running a sample Eleventy project.
+See [example usage](#example-usage) for how to use the shortcode. There's also a [demo folder](./demo/) running a sample Eleventy project. Refer to the [plugin options](#plugin-options) for more details.
 
-### Plugin Options
+## Plugin Options
 
 |Name|Type|Description|
 |----|----|-----------|
 |`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
 |`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children.|
-|`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. Any HTML attributes you want to set globally on all code demos.|
+|`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. An object specifying attribute-value pairs that should get set globally on all code demos.|
 
-### Shortcode Arguments
+## Shortcode Arguments
+
+The 11ty shortcode itself accepts the following arguments:
 
 |Name|Type|Description|
 |----|----|-----------|
@@ -63,16 +78,14 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 |`title`|`string`|A non-empty title for the code demo iframe. Required. Code demos without a title will throw an error.|
 |`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).|
 
-### Example Usage
+Refer to [example usage](#example-usage) to see these in action.
 
-> **Note**: All code comments and whitespace are removed, and HTML is escaped to ensure that it doesn't break the iframe. You do not need to worry about doing this yourself. The only caveat is that you should never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS.
-
-The shortcode renders as an interactive `<iframe>` powered by fenced Markdown code blocks defined in its body.
+## Example Usage
 
 The following example creates a button with some simple CSS and a click listener:
 
 ````md
-{% codeDemo 'Demo of a button that shows an alert when clicked' %}
+{% codeDemo 'Demo of a button that shows an alert when clicked', width="400", height="400" %}
 ```html
 <button>Click me!</button>
 ```
@@ -110,15 +123,14 @@ This renders as the following interactive button:
 With this output HTML:
 
 ```html
-<iframe title="My iframe title" srcdoc="<!doctypehtml><style>*{box-sizing:border-box;padding:0;margin:0}body,html{height:100%}body{display:grid;place-content:center}button{padding:8px}</style><body><button>Click me!</button><script>const button=document.querySelector('button');button.addEventListener('click',()=>{alert('hello, 11ty!')})</script>" height="100" class="code-demo"></iframe>
+<iframe width="400" height="400" title="Demo of a button that shows an alert when clicked" srcdoc="<!doctypehtml><style>*{box-sizing:border-box;padding:0;margin:0}body,html{height:100%}body{display:grid;place-content:center}button{padding:8px}</style><body><button>Click me!</button><script>const button=document.querySelector('button');button.addEventListener('click',()=>{alert('hello, 11ty!')})</script>"></iframe>
 ```
 
 A couple things to note:
 
-- The order does not matter for the code blocks.
-- All children are optional.
+- The order of the code blocks does not matter.
 - Multiple code blocks of the same type (e.g., two CSS blocks) will be merged.
-- Titles are required for accessibility, and an error will be thrown if you do not provide one.
+- A `title` is required for accessibility, and an error will be thrown if you do not provide one.
 
 ### Interpolating Code Blocks
 
@@ -167,7 +179,38 @@ As we saw, you can set HTML attributes globally on all code demos in your `.elev
 {% endcodeDemo %}
 ````
 
+If you want to pass in an HTML attribute that normally does not accept any values—like `allowfullscreen`—you'll need to give it a value anyway, or your template language will think you're trying to pass in a variable named `allowfullscreen`. So rather than doing this:
+
+```md
+{% codeDemo 'Title', allowfullscreen %}
+{% endcodeDemo %}
+```
+
+Do this:
+
+```md
+{% codeDemo 'Title', allowfullscreen="true" %}
+{% endcodeDemo %}
+```
+
+Or this:
+
+```md
+{% codeDemo 'Title', allowfullscreen="" %}
+{% endcodeDemo %}
+```
+
 > If you're using Liquid, keep an eye on this issue for keyword-argument support: https://github.com/11ty/eleventy/issues/2679. Or see my article here: [Passing Object Arguments to Liquid Shortcodes in 11ty](https://www.aleksandrhovhannisyan.com/blog/passing-object-arguments-to-liquid-shortcodes-in-11ty/).
+
+### Escaping and Minification
+
+This package uses [`minify-html`](https://github.com/wilsonzlin/minify-html) to efficiently minify the HTML, CSS, and JavaScript markup embedded in the iframe's `srcdoc` attribute. It also escapes HTML to prevent breaking your layouts. This means that:
+
+- All code comments are removed.
+- Double quotes (`"`) and other HTML symbols are escaped as entities (e.g., `&quot;`).
+- CSS is minified to the extent possible.
+- JavaScript is minified to the extent possible.
+- Whitespace between tags/lines of code/attributes is removed where possible, except from within HTML attributes, within JavaScript strings, and other places where it normally appears.
 
 ## Use Cases and Motivation
 
