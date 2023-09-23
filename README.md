@@ -11,6 +11,8 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+  - [Installation](#installation)
+  - [Registering the plugin](#registering-the-plugin)
 - [Plugin Options](#plugin-options)
 - [Shortcode Arguments](#shortcode-arguments)
 - [Example Usage](#example-usage)
@@ -21,11 +23,17 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 
 ## Getting Started
 
-Install the package:
+### Installation
+
+> **Note**: If you are on a [macOS ARM64 device](https://github.com/wilsonzlin/minify-html/issues/119#issuecomment-1688113448), you may run into problems with installing the plugin due to a package dependency. See the linked issue for a known workaround.
+
+Install the package using your preferred package manager. Example command in yarn:
 
 ```
 yarn add -D eleventy-plugin-code-demo
 ```
+
+### Registering the plugin
 
 Register it as a plugin in your Eleventy config:
 
