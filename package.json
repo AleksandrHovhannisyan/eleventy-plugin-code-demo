@@ -31,11 +31,11 @@
     "test:watch": "npx jest --watch"
   },
   "dependencies": {
-    "@minify-html/node": "^0.10.3",
-    "clsx": "^1.2.1",
-    "lodash.escape": "^4.0.1",
-    "markdown-it": "^13.0.1",
-    "outdent": "^0.8.0"
+    "@minify-html/node": "0.10.3",
+    "clsx": "1.2.1",
+    "lodash.escape": "4.0.1",
+    "markdown-it": "13.0.1",
+    "outdent": "0.8.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "2.0.0",
@@ -56,5 +56,6 @@
   },
   "lint-staged": {
     "*.js": "yarn run lint:js:fix"
-  }
+  },
+  "packageManager": "yarn@1.22.21+sha1.1959a18351b811cdeedbd484a8f86c3cc3bbaf72"
 }
