@@ -25,6 +25,7 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 
 ### Requirements
 
+- Node 18+
 - Eleventy v3.0+
 - ESM
 
