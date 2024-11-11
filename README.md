@@ -217,7 +217,7 @@ Or this:
 
 ### Escaping and Minification
 
-This package uses [`minify-html`](https://github.com/wilsonzlin/minify-html) to efficiently minify the HTML, CSS, and JavaScript markup embedded in the iframe's `srcdoc` attribute. It also escapes HTML to prevent breaking your layouts. This means that:
+This package uses [`html-minifier-terser`](https://github.com/terser/html-minifier-terser) to efficiently minify the HTML, CSS, and JavaScript markup embedded in the iframe's `srcdoc` attribute. It also escapes HTML to prevent breaking your layouts. This means that:
 
 - All code comments are removed.
 - Double quotes (`"`) and other HTML symbols are escaped as entities (e.g., `&quot;`).
