@@ -42,8 +42,9 @@ yarn add -D eleventy-plugin-code-demo
 Register it as a plugin in your Eleventy config:
 
 ```js
-const { EleventyPluginCodeDemo } = require('eleventy-plugin-code-demo');
+import { EleventyPluginCodeDemo } from 'eleventy-plugin-code-demo';
 
+// in your eleventy config
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
   name: 'shortcodeName',
