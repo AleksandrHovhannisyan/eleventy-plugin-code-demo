@@ -35,14 +35,13 @@
     "test:watch": "pnpm run test --watch"
   },
   "dependencies": {
-    "@minify-html/node": "0.10.3",
     "clsx": "1.2.1",
-    "lodash.escape": "4.0.1",
+    "html-minifier-terser": "^7.2.0",
     "markdown-it": "13.0.1",
     "outdent": "0.8.0"
   },
   "devDependencies": {
-    "@11ty/eleventy": "2.0.0",
+    "@11ty/eleventy": "3.0.0",
     "cross-env": "^7.0.3",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",

@@ -1,9 +1,9 @@
-const { EleventyPluginCodeDemo } = require('./src');
+import { EleventyPluginCodeDemo } from './src/index.js';
 
 /**
  * @param {import('@11ty/eleventy/src/UserConfig')} eleventyConfig
  */
-module.exports = (eleventyConfig) => {
+export default function(eleventyConfig) {
   eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
     renderDocument: ({ html, css, js }) => `
     <!DOCTYPE html>

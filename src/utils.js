@@ -1,8 +1,23 @@
-import escape from 'lodash.escape';
-import minifyHtml from '@minify-html/node';
 import markdownIt from 'markdown-it';
 import outdent from 'outdent';
 import clsx from 'clsx';
+import { minify } from 'html-minifier-terser';
+
+const charactersToEscape = new Map([
+  ['&', '&amp;'],
+  ['<', '&lt;'],
+  ['>', '&gt;'],
+  ['"', '&quot;'],
+  ["'", '&#39;'],
+]);
+
+/**
+ * Ecapes special symbols in the given HTML string, returning a new string.
+ * @param {string} string
+ */
+function escapeHtml(string) {
+  return string.replace(/[&<>"']/g, (char) => charactersToEscape.get(char));
+}
 
 /**
  * Given an array of tokens and a type of token to look up, finds all such matching tokens and returns one
@@ -10,30 +25,31 @@ import clsx from 'clsx';
  * @param {import('markdown-it/lib/token')[]} tokens
  * @param {string} type
  */
-const parseCode = (tokens, type) =>
-  tokens
+function parseCode(tokens, type) {
+  return tokens
     .filter((token) => token.info === type)
     .map((token) => token.content)
     .join('');
+}
 
 /** Maps a config of attribute-value pairs to an HTML string representing those same attribute-value pairs.
  * There's also this, but it's ESM only: https://github.com/sindresorhus/stringify-attributes
  * @param {Record<string, unknown>} attributeMap
  */
-const stringifyAttributes = (attributeMap) => {
+function stringifyAttributes(attributeMap) {
   return Object.entries(attributeMap)
     .map(([attribute, value]) => {
       if (typeof value === 'undefined') return '';
       return `${attribute}="${value}"`;
     })
     .join(' ');
-};
+}
 
 /**
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
  * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
  */
-export const makeCodeDemoShortcode = (options) => {
+export function makeCodeDemoShortcode(options) {
   const sharedIframeAttributes = options.iframeAttributes;
 
   /**
@@ -41,7 +57,7 @@ export const makeCodeDemoShortcode = (options) => {
    * @param {string} title The title to set on the iframe.
    * @param {Record<string, unknown>} props HTML attributes to set on this specific `<iframe>`.
    */
-  const codeDemoShortcode = (source, title, props = {}) => {
+  return async function codeDemoShortcode(source, title, props = {}) {
     if (!title) {
       throw new Error(`${options.name}: you must provide a non-empty title for the iframe.`);
     }
@@ -61,14 +77,15 @@ export const makeCodeDemoShortcode = (options) => {
     // We have to check this or Buffer.from will throw segfaults
     if (srcdoc) {
       // Convert all the HTML/CSS/JS into one long string with zero non-essential white space, comments, etc.
-      srcdoc = minifyHtml.minify(Buffer.from(srcdoc), {
-        keep_spaces_between_attributes: false,
+      srcdoc = await minify(srcdoc, {
+        preserveLineBreaks: false,
+        collapseWhitespace: true,
         // Only need to minify these two if they're present
-        minify_css: !!css,
-        minify_js: !!js,
+        minifyCSS: !!css,
+        minifyJS: !!js,
       });
     }
-    srcdoc = escape(srcdoc);
+    srcdoc = escapeHtml(srcdoc);
 
     let iframeAttributes = { ...sharedIframeAttributes, ...props };
     /* Do this separately to allow for multiple class names. Note that this should 
@@ -84,6 +101,4 @@ export const makeCodeDemoShortcode = (options) => {
       iframeAttributes ? ` ${iframeAttributes}` : ''
     }></iframe>`;
   };
-
-  return codeDemoShortcode;
-};
+}

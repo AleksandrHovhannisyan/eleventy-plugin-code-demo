@@ -23,9 +23,12 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 
 ## Getting Started
 
-### Installation
+### Requirements
 
-> **Note**: If you are on a [macOS ARM64 device](https://github.com/wilsonzlin/minify-html/issues/119#issuecomment-1688113448), you may run into problems with installing the plugin due to a package dependency. See the linked issue for a known workaround.
+- Eleventy v3.0+
+- ESM
+
+### Installation
 
 Install the package using your preferred package manager. Example command in yarn:
 
