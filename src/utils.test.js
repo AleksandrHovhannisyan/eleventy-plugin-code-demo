@@ -1,8 +1,10 @@
-const { outdent } = require('outdent');
-const { makeCodeDemoShortcode } = require('./utils');
+import { test, describe } from 'node:test';
+import assert from 'node:assert';
+import { outdent } from 'outdent';
+import { makeCodeDemoShortcode } from './utils.js';
 
 describe('makeCodeDemoShortcode', () => {
-  it('includes html, css, and js', () => {
+  test('includes html, css, and js', () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: ({ html, css, js }) => `
       <!doctype html>
@@ -27,7 +29,8 @@ describe('makeCodeDemoShortcode', () => {
         console.log("test");
         \`\`\`
         `;
-    expect(shortcode(source, 'title')).toStrictEqual(
+    assert.deepStrictEqual(
+      shortcode(source, 'title'),
       `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;button{padding:0}&lt;/style&gt;&lt;body&gt;&lt;button&gt;Click me&lt;/button&gt;&lt;script&gt;console.log(&quot;test&quot;)&lt;/script&gt;"></iframe>`
     );
   });
@@ -49,7 +52,8 @@ describe('makeCodeDemoShortcode', () => {
           <button>2</button>
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
+      assert.deepStrictEqual(
+        shortcode(source, 'title'),
         `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;body&gt;&lt;button&gt;1&lt;/button&gt;&lt;button&gt;2&lt;/button&gt;"></iframe>`
       );
     });
@@ -74,7 +78,8 @@ describe('makeCodeDemoShortcode', () => {
           }
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
+      assert.deepStrictEqual(
+        shortcode(source, 'title'),
         `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;style&gt;*{padding:0;margin:0}&lt;/style&gt;&lt;body&gt;"></iframe>`
       );
     });
@@ -95,30 +100,32 @@ describe('makeCodeDemoShortcode', () => {
           console.log("two");
           \`\`\`
           `;
-      expect(shortcode(source, 'title')).toStrictEqual(
+      assert.deepStrictEqual(
+        shortcode(source, 'title'),
         `<iframe title="title" srcdoc="&lt;!doctypehtml&gt;&lt;body&gt;&lt;script&gt;console.log(&quot;one&quot;);console.log(&quot;two&quot;)&lt;/script&gt;"></iframe>`
       );
     });
   });
-  it('respects global and per-usage attributes', () => {
+  test('respects global and per-usage attributes', () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: () => ``,
       iframeAttributes: { class: 'one', width: '300', height: '600' },
     });
-    expect(shortcode(``, 'title', { class: 'two' })).toStrictEqual(
+    assert.deepStrictEqual(
+      shortcode(``, 'title', { class: 'two' }),
       `<iframe title="title" srcdoc="" class="one two" width="300" height="600"></iframe>`
     );
   });
-  it(`removes __keywords from Nunjucks keyword argument props`, () => {
+  test(`removes __keywords from Nunjucks keyword argument props`, () => {
     const shortcode = makeCodeDemoShortcode({
       renderDocument: () => ``,
     });
-    expect(shortcode(``, 'title', { __keywords: true })).toStrictEqual(`<iframe title="title" srcdoc=""></iframe>`);
+    assert.deepStrictEqual(shortcode(``, 'title', { __keywords: true }), `<iframe title="title" srcdoc=""></iframe>`);
   });
-  it('throws an error if title is empty or undefined', () => {
+  test('throws an error if title is empty or undefined', () => {
     const shortcode = makeCodeDemoShortcode({ renderDocument: () => `` });
-    expect(() => shortcode('')).toThrow();
-    expect(() => shortcode('', '')).toThrow();
-    expect(() => shortcode('', 'Non-empty title')).not.toThrow();
+    assert.throws(() => shortcode(''));
+    assert.throws(() => shortcode('', ''));
+    assert.doesNotThrow(() => shortcode('', 'Non-empty title'));
   });
 });

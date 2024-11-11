@@ -1,8 +1,8 @@
-const escape = require('lodash.escape');
-const minifyHtml = require('@minify-html/node');
-const markdownIt = require('markdown-it');
-const outdent = require('outdent');
-const clsx = require('clsx');
+import escape from 'lodash.escape';
+import minifyHtml from '@minify-html/node';
+import markdownIt from 'markdown-it';
+import outdent from 'outdent';
+import clsx from 'clsx';
 
 /**
  * Given an array of tokens and a type of token to look up, finds all such matching tokens and returns one
@@ -33,7 +33,7 @@ const stringifyAttributes = (attributeMap) => {
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
  * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
  */
-const makeCodeDemoShortcode = (options) => {
+export const makeCodeDemoShortcode = (options) => {
   const sharedIframeAttributes = options.iframeAttributes;
 
   /**
@@ -87,5 +87,3 @@ const makeCodeDemoShortcode = (options) => {
 
   return codeDemoShortcode;
 };
-
-module.exports = { makeCodeDemoShortcode };

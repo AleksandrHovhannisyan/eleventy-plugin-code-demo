@@ -12,4 +12,4 @@
  * @property {Record<string, unknown>} [iframeAttributes] Any HTML attributes you want to set on the `<iframe>` (optional).
  */
 
-module.exports = {};
+export default {};
