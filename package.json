@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-code-demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Add interactive code demos to an Eleventy site with iframes",
   "keywords": [
     "eleventy",
