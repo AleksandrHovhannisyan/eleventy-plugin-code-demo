@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-code-demo",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -30,19 +30,19 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env ELEVENTY_ENV=development npx @11ty/eleventy --serve --incremental",
+    "dev": "cross-env ELEVENTY_ENV=development eleventy --config=demo/.eleventy.js --serve --incremental",
     "test": "node --test",
     "test:watch": "pnpm run test --watch"
   },
   "dependencies": {
-    "clsx": "1.2.1",
+    "clsx": "2.1.1",
     "html-minifier-terser": "^7.2.0",
-    "markdown-it": "13.0.1",
+    "markdown-it": "14.1.0",
     "outdent": "0.8.0"
   },
   "devDependencies": {
-    "@11ty/eleventy": "3.0.0",
-    "cross-env": "^7.0.3",
+    "@11ty/eleventy": "3.1.2",
+    "cross-env": "^10.0.0",
     "eslint": "^8.26.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",

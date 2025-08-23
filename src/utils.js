@@ -33,7 +33,6 @@ function parseCode(tokens, type) {
 }
 
 /** Maps a config of attribute-value pairs to an HTML string representing those same attribute-value pairs.
- * There's also this, but it's ESM only: https://github.com/sindresorhus/stringify-attributes
  * @param {Record<string, unknown>} attributeMap
  */
 function stringifyAttributes(attributeMap) {
@@ -47,7 +46,7 @@ function stringifyAttributes(attributeMap) {
 
 /**
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
- * @param {import('./typedefs').EleventyPluginCodeDemoOptions} options
+ * @param {Omit<import('./typedefs').EleventyPluginCodeDemoOptions, 'name'>} options
  */
 export function makeCodeDemoShortcode(options) {
   const sharedIframeAttributes = options.iframeAttributes;
@@ -59,7 +58,7 @@ export function makeCodeDemoShortcode(options) {
    */
   return async function codeDemoShortcode(source, title, props = {}) {
     if (!title) {
-      throw new Error(`${options.name}: you must provide a non-empty title for the iframe.`);
+      throw new Error(`[eleventy-plugin-code-demo]: you must provide a non-empty title for the iframe.`);
     }
 
     // This comes from Nunjucks when passing in keyword arguments; we don't want it to make its way into the output HTML

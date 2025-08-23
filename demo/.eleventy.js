@@ -1,9 +1,10 @@
-import { EleventyPluginCodeDemo } from './src/index.js';
+import { EleventyPluginCodeDemo } from '../src/index.js';
 
 /**
  * @param {import('@11ty/eleventy/src/UserConfig')} eleventyConfig
  */
 export default function(eleventyConfig) {
+  eleventyConfig.ignores.add("README.md");
   eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
     renderDocument: ({ html, css, js }) => `
     <!DOCTYPE html>
@@ -24,8 +25,8 @@ export default function(eleventyConfig) {
 
   return {
     dir: {
-      input: 'demo',
-      output: '_site',
+      input: '.',
+      output: './_site',
     },
     markdownTemplateEngine: 'njk',
   };

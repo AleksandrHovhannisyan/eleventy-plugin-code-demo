@@ -10,6 +10,6 @@ export async function EleventyPluginCodeDemo(eleventyConfig, options) {
   } catch (e) {
     console.log(`[eleventy-plugin-code-demo] WARN Eleventy plugin compatibility: ${e.message}`);
   }
-  const name = options.name ?? 'codeDemo';
-  eleventyConfig.addPairedAsyncShortcode(name, makeCodeDemoShortcode({ ...options, name }));
+  const { name = 'codeDemo', ...otherOptions } = options;
+  eleventyConfig.addPairedAsyncShortcode(name, makeCodeDemoShortcode(otherOptions));
 }
