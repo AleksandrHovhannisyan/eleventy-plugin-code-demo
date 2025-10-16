@@ -1,6 +1,6 @@
 {
   "name": "eleventy-plugin-code-demo",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "type": "module",
   "engines": {
     "node": ">=18"
@@ -49,6 +49,9 @@
     "husky": "4.3.0",
     "lint-staged": "12.1.7",
     "prettier": "^2.7.1"
+  },
+  "peerDependencies": {
+    "@11ty/eleventy": ">=3.0.0"
   },
   "husky": {
     "hooks": {
