@@ -1,4 +1,5 @@
 <!-- omit in toc -->
+
 # eleventy-plugin-code-demo
 
 > Add interactive HTML/CSS/JS code demos to an Eleventy site using Markdown code blocks.
@@ -8,6 +9,7 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 > **Note**: Never supply persistent user-generated code to this shortcode, as doing so could expose your site to XSS. In most cases, you are never going to be doing this anyway. For example, code demos that you define statically in your source files are perfectly safe.
 
 <!-- omit in toc -->
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
@@ -26,7 +28,7 @@ This plugin adds a paired shortcode to your 11ty site that converts HTML, CSS, a
 ### Requirements
 
 - Node 18+
-- Eleventy v3.0+
+- Eleventy ^3.0.0
 - ESM
 
 ### Installation
@@ -75,21 +77,21 @@ See [example usage](#example-usage) for how to use the shortcode. There's also a
 
 ## Plugin Options
 
-|Name|Type|Description|
-|----|----|-----------|
-|`name`|`string\|undefined`|Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.|
-|`renderDocument`|`(args: { html: string; css: string; js: string }) => string`|A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children.|
-|`iframeAttributes`|`Record<string, unknown>\|undefined`|Optional. An object specifying attribute-value pairs that should get set globally on all code demos.|
+| Name               | Type                                                          | Description                                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `name`             | `string\|undefined`                                           | Optional. The name to use for the shortcode. Defaults to `'codeDemo'` if not specified.                                                                                        |
+| `renderDocument`   | `(args: { html: string; css: string; js: string }) => string` | A render function to return custom markup for the document body of each iframe. This function will be called with the HTML, CSS, and JS parsed from your shortcode's children. |
+| `iframeAttributes` | `Record<string, unknown>\|undefined`                          | Optional. An object specifying attribute-value pairs that should get set globally on all code demos.                                                                           |
 
 ## Shortcode Arguments
 
 The 11ty shortcode itself accepts the following arguments:
 
-|Name|Type|Description|
-|----|----|-----------|
-|`source`|`string`|Implicit argument to the shortcode when you use the [paired shortcode](https://www.11ty.dev/docs/shortcodes/#paired-shortcodes) syntax in Eleventy. Contains all your Markdown code blocks.|
-|`title`|`string`|A non-empty title for the code demo iframe. Required. Code demos without a title will throw an error.|
-|`props`|`Record<string, unknown>`|Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).|
+| Name     | Type                      | Description                                                                                                                                                                                 |
+| -------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `source` | `string`                  | Implicit argument to the shortcode when you use the [paired shortcode](https://www.11ty.dev/docs/shortcodes/#paired-shortcodes) syntax in Eleventy. Contains all your Markdown code blocks. |
+| `title`  | `string`                  | A non-empty title for the code demo iframe. Required. Code demos without a title will throw an error.                                                                                       |
+| `props`  | `Record<string, unknown>` | Named keyword arguments for any HTML attributes you want to set on the iframe. See [Per-Usage HTML Attributes](#per-usage-html-attributes).                                                 |
 
 Refer to [example usage](#example-usage) to see these in action.
 
@@ -99,9 +101,11 @@ The following example creates a button with some simple CSS and a click listener
 
 ````md
 {% codeDemo 'Demo of a button that shows an alert when clicked', width="400", height="400" %}
+
 ```html
 <button>Click me!</button>
 ```
+
 ```css
 * {
   box-sizing: border-box;
@@ -120,12 +124,14 @@ button {
   padding: 8px;
 }
 ```
+
 ```js
 const button = document.querySelector('button');
 button.addEventListener('click', () => {
   alert('hello, 11ty!');
 });
 ```
+
 {% endcodeDemo %}
 ````
 
@@ -136,7 +142,12 @@ This renders as the following interactive button:
 With this output HTML:
 
 ```html
-<iframe width="400" height="400" title="Demo of a button that shows an alert when clicked" srcdoc="<!doctypehtml><style>*{box-sizing:border-box;padding:0;margin:0}body,html{height:100%}body{display:grid;place-content:center}button{padding:8px}</style><body><button>Click me!</button><script>const button=document.querySelector('button');button.addEventListener('click',()=>{alert('hello, 11ty!')})</script>"></iframe>
+<iframe
+  width="400"
+  height="400"
+  title="Demo of a button that shows an alert when clicked"
+  srcdoc="<!doctypehtml><style>*{box-sizing:border-box;padding:0;margin:0}body,html{height:100%}body{display:grid;place-content:center}button{padding:8px}</style><body><button>Click me!</button><script>const button=document.querySelector('button');button.addEventListener('click',()=>{alert('hello, 11ty!')})</script>"
+></iframe>
 ```
 
 A couple things to note:
@@ -151,24 +162,30 @@ You could also define your code blocks separately and interpolate them. The foll
 
 ````md
 {% capture html %}
+
 ```html
 <button>Click me!</button>
 ```
+
 {% endcapture %}
 {% capture css %}
+
 ```css
 button {
   padding: 8px;
 }
 ```
+
 {% endcapture %}
 {% capture js %}
+
 ```js
 const button = document.querySelector('button');
 button.addEventListener('click', () => {
   alert('hello, 11ty!');
 });
 ```
+
 {% endcapture %}
 
 {% codeDemo 'Title' %}
@@ -186,9 +203,11 @@ As we saw, you can set HTML attributes globally on all code demos in your `.elev
 
 ````md
 {% codeDemo 'Title', height="400" %}
+
 ```html
 <button>Click me!</button>
 ```
+
 {% endcodeDemo %}
 ````
 
@@ -233,4 +252,3 @@ I could create blank pages on my site and embed them as iframes, but that feels 
 
 1. Avoid having to wrangle with CSS specificity, and
 2. Be able to write custom JavaScript isolated from the rest of the page.
-
