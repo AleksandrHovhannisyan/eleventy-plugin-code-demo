@@ -1,11 +1,12 @@
-import { EleventyPluginCodeDemo } from '../src/index.js';
+import { EleventyPluginCodeDemo } from '../dist/index.js';
 
 /**
  * @param {import('@11ty/eleventy/src/UserConfig')} eleventyConfig
  */
 export default function(eleventyConfig) {
   eleventyConfig.ignores.add("README.md");
-  eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
+  /** @type {import('../dist/index.js').EleventyPluginCodeDemoOptions} */
+  const options = {
     renderDocument: ({ html, css, js }) => `
     <!DOCTYPE html>
     <html>
@@ -21,7 +22,8 @@ export default function(eleventyConfig) {
       height: '100',
       class: 'code-demo',
     },
-  });
+  }
+  eleventyConfig.addPlugin(EleventyPluginCodeDemo, options);
 
   return {
     dir: {

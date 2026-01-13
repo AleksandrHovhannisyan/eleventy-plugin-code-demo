@@ -1,11 +1,12 @@
 {
   "name": "eleventy-plugin-code-demo",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "type": "module",
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "description": "Add interactive code demos to an Eleventy site with iframes",
   "keywords": [
     "eleventy",
@@ -13,9 +14,8 @@
     "iframe"
   ],
   "files": [
-    "src/index.js",
-    "src/utils.js",
-    "src/typedefs.js",
+    "dist/index.js",
+    "dist/utils.js",
     "README.md",
     "package.json"
   ],
@@ -30,7 +30,10 @@
   },
   "license": "MIT",
   "scripts": {
-    "dev": "cross-env ELEVENTY_ENV=development eleventy --config=demo/.eleventy.js --serve --incremental",
+    "dev": "ELEVENTY_ENV=development eleventy --config=demo/.eleventy.js --serve --incremental",
+    "build": "tsc",
+    "ci": "pnpm run test && pnpm run build",
+    "lint": "pnpm eslint . --fix",
     "test": "node --test",
     "test:watch": "pnpm run test --watch"
   },
@@ -42,13 +45,16 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.2",
-    "cross-env": "^10.0.0",
-    "eslint": "^8.26.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "@eslint/js": "^9.39.2",
+    "@types/html-minifier-terser": "^7.0.2",
+    "@types/markdown-it": "^14.1.2",
+    "@types/node": "^25.0.7",
+    "eslint": "^9.39.2",
+    "globals": "^17.0.0",
     "husky": "4.3.0",
     "lint-staged": "12.1.7",
-    "prettier": "^2.7.1"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.53.0"
   },
   "peerDependencies": {
     "@11ty/eleventy": "^3.0.0"

@@ -1,7 +1,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert';
 import { outdent } from 'outdent';
-import { makeCodeDemoShortcode } from './utils.js';
+import { makeCodeDemoShortcode } from './utils.ts';
 
 describe('makeCodeDemoShortcode', () => {
   test('includes html, css, and js', async () => {
@@ -131,6 +131,7 @@ describe('makeCodeDemoShortcode', () => {
   });
   test('throws an error if title is empty or undefined', () => {
     const shortcode = makeCodeDemoShortcode({ renderDocument: () => `` });
+    // @ts-expect-error checking for illegal usage in JS
     assert.rejects(shortcode(''));
     assert.rejects(shortcode('', ''));
     assert.doesNotReject(shortcode('', 'Non-empty title'));

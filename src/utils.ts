@@ -1,7 +1,9 @@
 import markdownIt from 'markdown-it';
-import outdent from 'outdent';
+import { outdent } from 'outdent';
 import clsx from 'clsx';
 import { minify } from 'html-minifier-terser';
+import type { EleventyPluginCodeDemoOptions } from './index.js';
+import type { Token } from 'markdown-it/index.js';
 
 const charactersToEscape = new Map([
   ['&', '&amp;'],
@@ -12,20 +14,17 @@ const charactersToEscape = new Map([
 ]);
 
 /**
- * Ecapes special symbols in the given HTML string, returning a new string.
- * @param {string} string
+ * Escapes special symbols in the given HTML string, returning a new string.
  */
-function escapeHtml(string) {
-  return string.replace(/[&<>"']/g, (char) => charactersToEscape.get(char));
+function escapeHtml(string: string) {
+  return string.replace(/[&<>"']/g, (char) => charactersToEscape.get(char) as string);
 }
 
 /**
  * Given an array of tokens and a type of token to look up, finds all such matching tokens and returns one
  * big string concatenating all of those tokens' content.
- * @param {import('markdown-it/lib/token')[]} tokens
- * @param {string} type
  */
-function parseCode(tokens, type) {
+function parseCode(tokens: Token[], type: string) {
   return tokens
     .filter((token) => token.info === type)
     .map((token) => token.content)
@@ -33,9 +32,8 @@ function parseCode(tokens, type) {
 }
 
 /** Maps a config of attribute-value pairs to an HTML string representing those same attribute-value pairs.
- * @param {Record<string, unknown>} attributeMap
  */
-function stringifyAttributes(attributeMap) {
+function stringifyAttributes(attributeMap: Record<string, unknown>) {
   return Object.entries(attributeMap)
     .map(([attribute, value]) => {
       if (typeof value === 'undefined') return '';
@@ -46,9 +44,8 @@ function stringifyAttributes(attributeMap) {
 
 /**
  * Higher-order function that takes user configuration options and returns the plugin shortcode.
- * @param {Omit<import('./typedefs').EleventyPluginCodeDemoOptions, 'name'>} options
  */
-export function makeCodeDemoShortcode(options) {
+export function makeCodeDemoShortcode(options: Omit<EleventyPluginCodeDemoOptions, 'name'>) {
   const sharedIframeAttributes = options.iframeAttributes;
 
   /**
@@ -56,7 +53,7 @@ export function makeCodeDemoShortcode(options) {
    * @param {string} title The title to set on the iframe.
    * @param {Record<string, unknown>} props HTML attributes to set on this specific `<iframe>`.
    */
-  return async function codeDemoShortcode(source, title, props = {}) {
+  return async function codeDemoShortcode(source: string, title: string, props: Record<string, unknown> = {}) {
     if (!title) {
       throw new Error(`[eleventy-plugin-code-demo]: you must provide a non-empty title for the iframe.`);
     }
@@ -66,7 +63,7 @@ export function makeCodeDemoShortcode(options) {
       delete props['__keywords'];
     }
 
-    const tokens = markdownIt().parse(source);
+    const tokens = markdownIt().parse(source, {});
     const html = parseCode(tokens, 'html');
     const css = parseCode(tokens, 'css');
     const js = parseCode(tokens, 'js');
@@ -86,18 +83,18 @@ export function makeCodeDemoShortcode(options) {
     }
     srcdoc = escapeHtml(srcdoc);
 
-    let iframeAttributes = { ...sharedIframeAttributes, ...props };
+    const iframeAttributes = { ...sharedIframeAttributes, ...props };
     /* Do this separately to allow for multiple class names. Note that this should 
     technically also be done for other HTML attributes that could accept multiple 
     values, like aria-describedby. But it's not worth accounting for every possibility here. */
-    const className = clsx(sharedIframeAttributes?.class, props.class);
+    const className = clsx(sharedIframeAttributes?.class, typeof props.class === 'string' ? props.class : undefined);
     if (className) {
       iframeAttributes.class = className;
     }
-    iframeAttributes = stringifyAttributes(iframeAttributes);
+    const stringifiedAttributes = stringifyAttributes(iframeAttributes);
 
     return outdent`<iframe title="${title}" srcdoc="${srcdoc}"${
-      iframeAttributes ? ` ${iframeAttributes}` : ''
+      stringifiedAttributes ? ` ${stringifiedAttributes}` : ''
     }></iframe>`;
   };
 }

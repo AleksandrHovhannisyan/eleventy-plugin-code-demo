@@ -44,14 +44,18 @@ yarn add -D eleventy-plugin-code-demo
 Register it as a plugin in your Eleventy config:
 
 ```js
-import { EleventyPluginCodeDemo } from 'eleventy-plugin-code-demo';
+import {
+  EleventyPluginCodeDemo,
+  // if you're using TypeScript
+  type EleventyPluginCodeDemoOptions,
+} from "eleventy-plugin-code-demo";
 
 // in your eleventy config
 eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   // Use any shortcode name you want
-  name: 'shortcodeName',
-  /* Render whatever document structure you want. The HTML, CSS, and JS parsed 
-  from the shortcode's body are supplied to this function as an argument, so 
+  name: "shortcodeName",
+  /* Render whatever document structure you want. The HTML, CSS, and JS parsed
+  from the shortcode's body are supplied to this function as an argument, so
   you can position them wherever you want, or add class names or data-attributes to html/body */
   renderDocument: ({ html, css, js }) => `
   <!DOCTYPE html>
@@ -66,12 +70,15 @@ eleventyConfig.addPlugin(EleventyPluginCodeDemo, {
   </html>`,
   // key-value pairs for HTML attributes; these are applied to all code previews
   iframeAttributes: {
-    height: '300',
-    style: 'width: 100%;',
-    frameborder: '0',
+    height: "300",
+    style: "width: 100%;",
+    frameborder: "0",
   },
-});
+} satisfies EleventyPluginCodeDemoOptions);
 ```
+
+> [!NOTE]
+> If you're using JavaScript, you can use jsDoc type annotations instead for intellisense suggestions.
 
 See [example usage](#example-usage) for how to use the shortcode. There's also a [demo folder](./demo/) running a sample Eleventy project. Refer to the [plugin options](#plugin-options) for more details.
 
@@ -126,9 +133,9 @@ button {
 ```
 
 ```js
-const button = document.querySelector('button');
-button.addEventListener('click', () => {
-  alert('hello, 11ty!');
+const button = document.querySelector("button");
+button.addEventListener("click", () => {
+  alert("hello, 11ty!");
 });
 ```
 
@@ -180,9 +187,9 @@ button {
 {% capture js %}
 
 ```js
-const button = document.querySelector('button');
-button.addEventListener('click', () => {
-  alert('hello, 11ty!');
+const button = document.querySelector("button");
+button.addEventListener("click", () => {
+  alert("hello, 11ty!");
 });
 ```
 
